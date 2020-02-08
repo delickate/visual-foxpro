@@ -1,0 +1,26 @@
+* //SANI: Getting Key
+
+SET PROCEDURE TO json ADDITIVE
+#Define clAsync .F.
+loRequest = Createobject('MsXml2.XmlHttp')
+
+loRequest.Open("GET","http://www.rims.punjab.gov.pk/api/databaseupdate/formkey", clAsync)
+loRequest.Send()
+
+oPerson = json_decode(loRequest.ResponseText)
+
+this.Parent.lblkey.Caption = oPerson.get('key')
+
+
+
+* //SANI: Post Data
+
+mykey= this.Parent.lblkey.Caption 
+mydata='{"pntn":"123456789","branchcode":"BR123456789", "invoice_number":"34", "invoice_date": "2015-08-04","invoice_time": "02:41", "detail":[{"item":"Ice cream","item_code":"23","quantity":"1","unit_price":"725"}]}'
+
+web = "http://rims.punjab.gov.pk/api/databaseupdate/formdata/?key=" + mykey + "&data="+ mydata
+XML = CreateObject("Microsoft.XMLHTTP")
+XML.Open("POST", web, .f.)
+XML.Send
+
+this.Parent.lbldata.Caption = xml.responsetext
